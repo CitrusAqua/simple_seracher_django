@@ -5,7 +5,6 @@ import urllib
 import math
 
 from .search import get_search_result
-from .cache import get_cache
 from .config import entities_per_page
 from .config import cache_dir
 
@@ -42,8 +41,9 @@ def search(request):
 def cache(request):
     if 'u' in request.GET:
         filename = request.GET['u']
+        filename = urllib.parse.quote(filename, safe="")
         cont = ''
-        with open(cache_dir+filename, "r", encoding="utf-8") as f:
+        with open(cache_dir+filename+'.cache', "r", encoding="utf-8") as f:
             cont = f.read()
         return HttpResponse(cont)
     return HttpResponse("Cache not found.")

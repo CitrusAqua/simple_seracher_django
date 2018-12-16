@@ -36,7 +36,12 @@ def get_search_result(keywords, page=1):
     #    for w in seg_list:
     #        query.append(w)
 
+    sites = []
+
     for k in keywords.split(' '):
+        if k.startswith('site:'):
+            sites.append(k[5:])
+            continue
         seg_list = jieba.cut_for_search(k)
         for w in seg_list:
             query.append(w)
@@ -52,7 +57,12 @@ def get_search_result(keywords, page=1):
 
     filtered = []
     for row in result:
-        filtered.append(row[0])
+        if len(sites) != 0:
+            for s in sites:
+                if s in row[0]:
+                    filtered.append(row[0])
+        else:
+            filtered.append(row[0])
 
     for w in query:
         if w not in invindex:
