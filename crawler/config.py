@@ -11,7 +11,7 @@ chromedriver_path   = r'N:/Tools/chromedriver/chromedriver.exe'
 
 cache_dir = "cache/"
 
-key_batch_size = 1
+key_batch_size = 8
 
 
 init_words = ["动", "播", "搬", "番", "国", "音", "影"]

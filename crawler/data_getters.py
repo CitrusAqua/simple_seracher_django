@@ -19,7 +19,7 @@ def h_bilibili(url):
 	res = requests.Response()
 	try:
 		s = requests.Session()
-		s.mount('https://', HTTPAdapter(max_retries=10))
+		s.mount('https://', HTTPAdapter(max_retries=3))
 		res = s.get('https://api.vc.bilibili.com/link_draw/v1/doc/detail?doc_id='+id, headers=bili_header)
 		s.close()
 	except:
@@ -51,7 +51,7 @@ def search_acfun(key):
 	res = requests.Response()
 	try:
 		s = requests.Session()
-		s.mount('https://', HTTPAdapter(max_retries=10))
+		s.mount('https://', HTTPAdapter(max_retries=3))
 		res = s.get('http://search.aixifan.com/search?q='+key, headers=acfun_header)
 		s.close()
 	except:

@@ -62,12 +62,16 @@ def new_driver():
 
 def parse_url(url, domain):
 
-    url = url.split('?', 1)[0]
-    url = url.split('#', 1)[0]
+    if 'javascript' in url:
+        return None
 
     for p in skip_prefix:
         if url.startswith(p):
             return None
+
+    url = url.split('?', 1)[0]
+    url = url.split('#', 1)[0]
+
 
     if url.startswith("https://") or url.startswith("http://") or url.startswith("//"):
         e = url.split('/')[2]
@@ -103,7 +107,7 @@ def proc_search(domain, url, headers, key):
         res = requests.Response()
         try:
             s = requests.Session()
-            s.mount('https://', HTTPAdapter(max_retries=10))
+            s.mount('https://', HTTPAdapter(max_retries=3))
             res = s.get(url+key, headers=headers)
             s.close()
         except:
@@ -136,11 +140,11 @@ def proc_search(domain, url, headers, key):
                 new_key.add(w)
 
     for href in href_list:
-        url = parse_url(href, domain)
-        if url is not None:
-            get_webpage(domain, url, headers)
+        _url = parse_url(href, domain)
+        if _url is not None:
+            get_webpage(domain, _url, headers)
 
-    #driver.quit()
+    print(url, "Fin")
 
 
 
@@ -151,7 +155,7 @@ def get_webpage(domain, url, headers, retries=0):
     res = requests.Response()
     try:
         s = requests.Session()
-        s.mount('https://', HTTPAdapter(max_retries=10))
+        s.mount('https://', HTTPAdapter(max_retries=3))
         res = s.get(url, headers=headers)
         s.close()
     except:
@@ -178,7 +182,7 @@ def get_webpage(domain, url, headers, retries=0):
             break
 
     if tit is None:
-        if retries < 5:
+        if retries < 3:
             get_webpage(domain, url, headers, retries+1)
         else:
             log("No title: "+url)
@@ -243,7 +247,7 @@ def crawler():
     try:
         conn = sqlite3.connect(db_file)
         conn.text_factory = str
-        pool = threadpool.ThreadPool(8)
+        pool = threadpool.ThreadPool(16)
 
         # Init keywords
         with open(word_file, "rb") as f:
