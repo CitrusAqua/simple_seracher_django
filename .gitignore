@@ -102,3 +102,14 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+
+crawler/cache/
+crawler/crawler.log
+crawler/index.dat
+crawler/inited
+crawler/pagerank.dat
+crawler/searched_word.dat
+crawler/webpages.db
+crawler/words2search.dat

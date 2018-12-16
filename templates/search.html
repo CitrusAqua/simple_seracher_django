@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Search Results</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link href="sticky-footer.css" rel="stylesheet">
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Simple Search Engine</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nvb" aria-controls="nvb" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nvb">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Search<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-bottom: 16px">
+        <form class="form-inline" style="margin-top:36px; margin-bottom:38px;" action="/search" method="get">
+            <div class="input-group input-group col-5">
+                <input type="text" class="form-control" name="q" value={{key}}>
+            </div>
+            <div class="col-1">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+        <div style="padding-left:26px">
+            <p style="padding-bottom:36px">{{ res_count }} results got in {{ search_time }} ms.</p>
+        {% for url, url_quoted, title in res_list %}
+            <div style="margin-top:26px; margin-bottom:18px">
+                    <h5><a href="{{ url }}">{{ title }}</a></h5>
+                <p><small>{{ url }}</small></p>
+                <a href="/cache?u={{ url_quoted }}"><small>webpage cache</small></a>
+            </div>
+        {% endfor %}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                {% if page > 1 %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{page|add:"-1"}}">Previous</a></li>
+                {% endif %}
+                {% if page|add:"-3" > 1 %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p=1">1</a></li>
+                    <h5 class="text-primary" style="padding-left:12px; padding-right:12px">...</h5>
+                {% endif %}
+                {% if page|add:"-3" > 0 %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{page|add:"-3"}}">{{page|add:"-3"}}</a></li>
+                {% endif %}
+                {% if page|add:"-2" > 0 %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{page|add:"-2"}}">{{page|add:"-2"}}</a></li>
+                {% endif %}
+                {% if page|add:"-1" > 0 %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{page|add:"-1"}}">{{page|add:"-1"}}</a></li>
+                {% endif %}
+                    <li class="page-item active"><span class="page-link">{{page}}</span></li>
+                {% if page|add:"1" <= max_page %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{page|add:"1"}}">{{page|add:"1"}}</a></li>
+                {% endif %}
+                {% if page|add:"2" <= max_page %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{page|add:"2"}}">{{page|add:"2"}}</a></li>
+                {% endif %}
+                {% if page|add:"3" <= max_page %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{page|add:"3"}}">{{page|add:"3"}}</a></li>
+                {% endif %}
+                {% if page|add:"3" < max_page %}
+                    <h5 class="text-primary" style="padding-left:12px; padding-right:12px">...</h5>
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{max_page}}">{{max_page}}</a></li>
+                {% endif %}
+                {% if page < max_page %}
+                    <li class="page-item"><a class="page-link" href="/search?q={{key}}&p={{page|add:"1"}}">Next</a></li>
+                {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>
